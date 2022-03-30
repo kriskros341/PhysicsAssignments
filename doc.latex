@@ -1,0 +1,28 @@
+%- extends "base.latex"
+
+%- block body
+%- for i in range(col_count)
+ \VAR{headers[i]}
+    %- if i % col_count == 0
+    %- else
+        \\
+    %- endif
+%- endfor
+
+%- if col_count == 1
+    %- for i in range(row_count)
+       \VAR{data[i]} \\
+    %- endfor
+%- else
+    %- for i in range(row_count)
+        %- for j in range(col_count)
+            \VAR{data[j][i]}
+            %- if j % col_count == 0
+                &
+            %- else
+                \\
+            %- endif
+        %- endfor
+    %- endfor
+%- endif
+%- endblock
