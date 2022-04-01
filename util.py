@@ -157,24 +157,29 @@ class MyPlot(MyPlotBase):
         plt.ylabel(yLabel)
         plt.grid()
         plt.title(self.getTitle())
-
-
         return self
 
-    def plotBars(self, args: Optional[List[float]] = None, vals: Optional[List[float]] = None, erro: Optional[List[float]] = None, **kwargs):
+    def boldAxes(self):
+        self.axes.axhline(y=0, lw=3, color='k')
+        self.axes.axvline(x=0, lw=3, color='k')
+
+    def plotBars(self, args: Optional[List[float]] = None, vals: Optional[List[float]] = None, **kwargs):
+        default_bars_style = ",r"
         if not args:
             args = self.getArgs()
         if not vals:
             vals = self.getVals()
-        if not erro:
-            if not self.getErro():
-                raise Exception("No errro data given")
-            erro = self.getErro()
-        print(args, vals, erro)
-        if (len(args) != len(vals)) or (len(vals) != len(erro)):
+        if not self.getErro():
+            if not "xerr" in kwargs.keys() and not "yerr" in kwargs.keys():
+                raise Exception("No error data provided")
+        else:
+            kwargs["yerr"] = self.getErro()
+        if not "fmt" in kwargs.keys():
+            kwargs["fmt"] = default_bars_style
+        if (len(args) != len(vals)):
             raise Exception("Invalid errorbar data given")
 
-        self.axes.errorbar(args, vals, erro, fmt=",r", **kwargs)
+        self.axes.errorbar(args, vals, **kwargs)
         return self
 
     def setTitle(self, title: str):

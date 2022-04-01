@@ -53,11 +53,12 @@ def main():
         x = np.linspace(min(pierwiastki_wysokosci) - line_offset, max(pierwiastki_wysokosci) + line_offset)
         y = x * a + b
 
-        w3 = MyPlot(x, y)
+        w3 = MyPlot(x, y, niepewnosc_calkowita)
+
         w3.setTitle(r'Wykres regresji liniowej')
         # plt.margins(-1 * line_offset)
         w3.addStyle(r'$\sqrt{H}$ - pierwiastek wysokosci [m]', r'$t_{śr}$ - średni czas spadania [s]')
-        w3.plotLine(extended=True).plotBars(pierwiastki_wysokosci, srednie_t, niepewnosci_calkowite, ecolor='r', capsize=2)
+        w3.plotLine(extended=True).plotBars(pierwiastki_wysokosci, srednie_t, ecolor='r', capsize=2)
 
         plt.show()
 
