@@ -170,8 +170,9 @@ class MyPlot(MyPlotBase):
         if not vals:
             vals = self.getVals()
         if not self.getErro():
-            if not "xerr" in kwargs.keys() and not "yerr" in kwargs.keys():
-                raise Exception("No error data provided")
+            if not args or not vals:
+                if not "xerr" in kwargs.keys() and not "yerr" in kwargs.keys():
+                    raise Exception("No error data provided")
         else:
             kwargs["yerr"] = self.getErro()
         if not "fmt" in kwargs.keys():

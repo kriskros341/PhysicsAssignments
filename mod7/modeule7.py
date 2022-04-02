@@ -59,6 +59,8 @@ def main():
         # plt.margins(-1 * line_offset)
         w3.addStyle(r'$\sqrt{H}$ - pierwiastek wysokosci [m]', r'$t_{śr}$ - średni czas spadania [s]')
         w3.plotLine(extended=True).plotBars(pierwiastki_wysokosci, srednie_t, ecolor='r', capsize=2)
+        l = LatexParser("../")
+        print(l.gen_tex_boilerplate(X=pierwiastki_wysokosci, Y=srednie_t, uncertain=True, extended=False, signX=r"$\sqrt{H}$", signY=r"$\bar{t}$", rounding=5))
 
         plt.show()
 

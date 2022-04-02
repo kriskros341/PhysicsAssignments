@@ -1,0 +1,78 @@
+\begin{center}
+$
+\\ \huge{N = 10} \\ ~ \\
+\huge{S_{x} = \Sigma_{i=1}^{N} \VAR{signX}}_{i} = \VAR{SX} \\
+%- if extended
+ ~ \\
+\small{
+%- for i in range(N)
+    \VAR{X[i]}
+    %- if i == N-1
+        = \\
+    %- else
+        +
+    %- endif
+%- endfor
+} \\
+\large{= \VAR{SX} = S_{x}}
+%- endif
+\\ ~ \\\huge{S_{y} = \Sigma_{i=1}^{N} \VAR{signY}}_{i} = \VAR{SY} \\
+%- if extended
+ ~ \\
+\small{
+%- for i in range(N)
+    \VAR{Y[i]}
+    %- if i == N-1
+        = \\
+    %- else
+        +
+    %- endif
+%- endfor
+} \\
+\large{= \VAR{SY} = S_{y}}
+%- endif
+\\ ~ \\\huge{S_{xx} = \Sigma_{i=1}^{N} \VAR{signX}}^{2}_{i} = \VAR{SXX} \\
+%- if extended
+ ~ \\
+\small{
+%- for i in range(N)
+    \VAR{X[i]}^{2}
+    %- if i == N-1
+        = \\
+    %- else
+        +
+    %- endif
+%- endfor
+} \\
+\large{= \VAR{SXX} = S_{xx}}
+%- endif
+\\ ~ \\\huge{S_{xy} = \Sigma_{i=1}^{N} \VAR{signX}_{i}\VAR{signY}}_{i} = \VAR{SXY} \\
+%- if extended
+ ~ \\
+\small{
+%- for i in range(N)
+    \VAR{X[i]}*\VAR{Y[i]}
+    %- if i == N-1
+        = \\
+    %- else
+        +
+    %- endif
+%- endfor
+} \\
+\large{= \VAR{SXY} = S_{xy}} \\
+%- endif
+$
+\\\huge{$
+    a = \frac{NS_{xy} - S_{x}S_{y}}{NS_{xx} - S_{x}S_{x}} = \VAR{a}
+    $} \\ ~ \\
+    \huge{$
+    b = \frac{S_{xx}S_{y} - S_{x}S_{xy}}{NS_{xx} - S_{x}S_{x}} = \VAR{b}
+    $}\\ ~ \\
+    %- if uncertain
+        \epsilon_{i} = \VAR{signY}_{i} - a\VAR{signX}_{i} - b \\
+        S_{\epsilon\epsilon} = \Sigma^{N}_{i=1}\epsilon^{2}_{i} = \VAR{See} \\ ~ \\
+        u(a) = \sqrt{\frac{N}{N-2}\frac{S_{\epsilon\epsilon}}{NS_{xx}-S^{2}_{x}}} = \VAR{Ua} \\ ~ \\
+        u(b) = \sqrt{\frac{N}{N-2}\frac{S_{xx}S_{\epsilon\epsilon}}{NS_{xx}-S^{2}_{x}}} = \VAR{Ub} \\ ~ \\
+    %- endif
+    \large{Wszystkie wartości przybliżone do \VAR{rounding_name} miejsca po przecinku}
+\end{center}

@@ -1,6 +1,5 @@
 from typing import Tuple
 from util import *
-
 from lat import LatexParser
 import math
 
@@ -42,31 +41,53 @@ def main():
     density_of_oil = [approx_linear(x, (20, 878.8), (50, 857.5)) for x in arguments]
     #l = LatexParser("..\\")
     #print(l.gen_tex_table(["doil"], density_of_oil))
-    micro_from_avg_time = [eq(approx_linear(arguments[i], (20, 878.8), (50, 857.5)), average_values[i]) for i in range(len(arguments))]
-    micro_uncertainty = [eq(approx_linear(arguments[i], (20, 878.8), (50, 857.5)), czasomierz_Ub) for i in range(len(arguments))]
-    w2 = MyPlot(arguments, micro_from_avg_time)
+    eta_from_avg_time = [eq(approx_linear(arguments[i], (20, 878.8), (50, 857.5)), average_values[i]) for i in range(len(arguments))]
+    eta_uncertainty = [eq(approx_linear(arguments[i], (20, 878.8), (50, 857.5)), czasomierz_Ub) for i in range(len(arguments))]
+    w2 = MyPlot(arguments, eta_from_avg_time)
     w2.setTitle("Wykres wsp. lepkości od temperatury")
-    w2.addStyle(r"temperatura", r"wsp. lepkosci")
-    print(micro_uncertainty)
-    w2.plotBars(xerr=czasomierz_Ub, yerr=micro_uncertainty, capsize=2)
+    w2.addStyle(r'T - temperatura [${}^{\circ}C$]', r'$\eta$ - współczynnik lepkości [$\frac{kg}{ms}$]')
+    print(eta_uncertainty)
+    w2.plotBars(xerr=czasomierz_Ub, yerr=eta_uncertainty, capsize=2)
 
-    w3 = MyPlot([1/x for x in arguments], [math.log(x) for x in micro_from_avg_time])
+    w3 = MyPlot([1/x for x in arguments], [math.log(x) for x in eta_from_avg_time])
     w3.setTitle("Wykres logarytmu naturalnego wsp. lepkości od odwrotności temperatury")
+    w3.addStyle(r'$\frac{1}{T}$ - temperatura [${}^{\circ}C$]', r'$\ln{\eta}$ - logarytm naturalny współczynnika lepkości [$\frac{kg}{ms}$]')
+    w3.plotBars([1/x for x in arguments], [math.log(x) for x in eta_from_avg_time], yerr=eta_uncertainty, capsize=2)
 
-    w3.addStyle(r"1/temperatura", r"ln(wsp. lepkosci)")
-    w3.plotLine()
 
-    a, b = linreg(arguments, micro_from_avg_time)
-    x = np.linspace(min(arguments) - line_offset, max(micro_from_avg_time) + line_offset)
+    a, b = linreg(arguments, eta_from_avg_time)
+    x = np.linspace(min(arguments) - 10, max(arguments) + 10)
     y = x * a + b
 
-    w4 = MyPlot(x, y)
-    w4.setTitle("Wykres regresji liniowej")
-    w4.addStyle(r"temperatura", r"wsp. lepkosci")
-    w4.plotLine(extended=True)
+    #w4 = MyPlot(x, y)
+    #w4.setTitle("Wykres regresji liniowej")
+    #w4.addStyle(r"temperatura", r"wsp. lepkosci")
+    #w4.plotLine()
+    #w4.plotBars(arguments, eta_uncertainty,  ecolor='r', capsize=2)
+
+    w4 = MyPlot(x, y, eta_uncertainty)
+
+    w4.setTitle(r'Wykres regresji liniowej')
+    # plt.margins(-1 * line_offset)
+    w4.addStyle(r'T - temperatura [${}^{\circ}C$]', r'$\eta$ - współczynnik lepkości [$\frac{kg}{ms}$]')
+    w4.plotLine(extended=True).plotBars(arguments, eta_from_avg_time, ecolor='r', capsize=2)
 
 
+
+    e = [eta_from_avg_time[i] - a * arguments[i] - b for i in range(len(arguments))]
+    See = sum(x*x for x in e)
+    #print(See)
+    n = len(arguments)
+    common = n/(n-2) * See/(n*sum(x*x for x in arguments) - sum(arguments))
+    Ua = math.sqrt(common)
+    Ub = math.sqrt(sum(x*x for x in arguments) * common)
+    print(Ua, Ub)
+
+    l = LatexParser("../")
+    print(l.gen_tex_boilerplate(extended=True, uncertain=False, rounding=4, X=arguments, Y=eta_from_avg_time, signX=r"T", signY=r"\eta"))
     plt.show()
+
+
 """
     w3 = MyPlot([1/x for x in arguments], [x for x in density_of_oil])
     w3.setTitle("w2")
