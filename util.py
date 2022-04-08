@@ -94,11 +94,12 @@ def linreg(argumenty: List[float], wartosci: List[float]):
     Sxy = 0
     for i in range(len(argumenty)):
         Sxy += argumenty[i] * wartosci[i]
-    print(Sx, Sxx, Sy, Sxy)
     a = (n * Sxy - Sx * Sy) / (n * Sxx - Sx * Sx)
     b = (Sxx * Sy - Sx * Sxy) / (n * Sxx - Sx * Sx)
-    print(a, b)
     return a, b
+
+def CtoK(T: float):
+    return 273.15 + T
 
 
 class MyPlotBase:
@@ -133,6 +134,7 @@ class MyPlotBase:
 
     def getErro(self):
         return self._erro
+
 
 
 class MyPlot(MyPlotBase):
@@ -187,17 +189,20 @@ class MyPlot(MyPlotBase):
         super().setTitle(title)
         plt.title(self.getTitle())
 
-def load_data(path: str):
+
+def load_data(path: str, manyValues: bool = True):
     data = {}
     realpath = os.path.dirname(os.path.realpath(sys.argv[0]))
     with open(realpath + "\\" + path, 'r') as f:
-        filedata = [x for x in f.readlines()]
+        filedata = [x.replace(',', '.').replace('\n', '').split('\t') for x in f.readlines()]
 
-        arguments = [float(y.replace(',', '.')) for y in [x.split('\t')[0] for x in filedata]]
-        values = [[float(y.replace('\n', '').replace(',', '.')) for y in x.split('\t')[1:]] for x in filedata]
+        arguments = [float(y) for y in [x[0] for x in filedata]]
+        values = [[float(y) for y in x[1:]] for x in filedata]
 
         data["arguments"] = arguments
         data["values"] = values
+        if not manyValues:
+            data["values"] = [x[0] for x in data["values"]]
     return data
 
 def statistical_uncertainty(values_matrix: List[List[float]]):

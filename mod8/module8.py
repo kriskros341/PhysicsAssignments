@@ -49,9 +49,12 @@ def main():
     print(eta_uncertainty)
     w2.plotBars(xerr=czasomierz_Ub, yerr=eta_uncertainty, capsize=2)
 
-    w3 = MyPlot([1/x for x in arguments], [math.log(x) for x in eta_from_avg_time])
+    newA = [1/CtoK(x) for x in arguments]
+    newB = [math.log(x) for x in eta_from_avg_time]
+
+    w3 = MyPlot(newA, newB)
     w3.setTitle("Wykres logarytmu naturalnego wsp. lepkości od odwrotności temperatury")
-    w3.addStyle(r'$\frac{1}{T}$ - temperatura [${}^{\circ}C$]', r'$\ln{\eta}$ - logarytm naturalny współczynnika lepkości [$\frac{kg}{ms}$]')
+    w3.addStyle(r'$\frac{1}{T}$ - temperatura [$K$]', r'$\ln{\eta}$ - logarytm naturalny współczynnika lepkości [$\frac{kg}{ms}$]')
     w3.plotBars([1/x for x in arguments], [math.log(x) for x in eta_from_avg_time], yerr=eta_uncertainty, capsize=2)
 
 
@@ -72,6 +75,16 @@ def main():
     w4.addStyle(r'T - temperatura [${}^{\circ}C$]', r'$\eta$ - współczynnik lepkości [$\frac{kg}{ms}$]')
     w4.plotLine(extended=True).plotBars(arguments, eta_from_avg_time, ecolor='r', capsize=2)
 
+    a, b = linreg(newA, newB)
+
+    x = np.linspace(min(arguments) - 10, max(arguments) + 10)
+    y = x * a + b
+
+    w5 = MyPlot(x, y)
+    w5.setTitle("Nie mam pojęcia")
+    w5.addStyle(r'Wpisać', r'Co tu')
+    w5.plotLine()
+
 
 
     e = [eta_from_avg_time[i] - a * arguments[i] - b for i in range(len(arguments))]
@@ -81,11 +94,17 @@ def main():
     common = n/(n-2) * See/(n*sum(x*x for x in arguments) - sum(arguments))
     Ua = math.sqrt(common)
     Ub = math.sqrt(sum(x*x for x in arguments) * common)
-    print(Ua, Ub)
+    #print(Ua, Ub)
 
     l = LatexParser("../")
-    print(l.gen_tex_boilerplate(extended=True, uncertain=False, rounding=4, X=arguments, Y=eta_from_avg_time, signX=r"T", signY=r"\eta"))
-    plt.show()
+    #print(l.gen_tex_boilerplate(extended=True, uncertain=False, rounding=4, X=arguments, Y=eta_from_avg_time, signX=r"T", signY=r"\eta"))
+    #plt.show()
+    #print(a, b)
+    print(newA, newB)
+    print(a, b)
+    
+    #print(l.gen_tex_boilerplate(extended=True, uncertain=False, rounding=4, X=[x for x in newA], Y=[x for x in newB], signX=r"T", signY=r"\eta"))
+
 
 
 """

@@ -36,10 +36,12 @@ class LatexParser:
         b = (SXX * SY - SX * SXY) / (N * SXX - SX * SX)
 
         e = [Y[i] - a * X[i] - b for i in range(len(X))]
+
         See = sum(x * x for x in e)
         common = N / (N - 2) * See / (N * sum(x * x for x in X) - sum(X))
         Ua = math.sqrt(common)
         Ub = math.sqrt(sum(x * x for x in X) * common)
+
         rounding_name = [
             "pierwszego",
             "drugiego",
