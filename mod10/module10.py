@@ -25,8 +25,8 @@ def main():
     fig1, ax1 = plt.subplots()
 
 
-    ax1.errorbar(arguments1, values1, xerr=uI1, yerr=uT1, fmt=",b", label="brak polaryzacji", capsize=2)
-    ax1.errorbar(arguments2, values2, xerr=uI2, yerr=uT2, fmt=",r", label="polaryzacja", capsize=2)
+    ax1.errorbar(arguments1, values1, xerr=uI1, yerr=uT1, fmt=",b", label="odwrotna polaryzacja", capsize=2)
+    ax1.errorbar(arguments2, values2, xerr=uI2, yerr=uT2, fmt=",r", label="zwykła polaryzacja", capsize=2)
     plt.legend(loc="upper left")
     plt.minorticks_on()
     plt.xlabel(r"I - natężenie prądu [A]")
@@ -37,50 +37,41 @@ def main():
     offset = 0.5
 
     a1, b1 = linreg(arguments1, values1)
-    x = np.linspace(min(arguments1)-offset, max(arguments1)+offset)
-    y = x * a1 + b1
+    x1 = np.linspace(min(arguments1)-offset, max(arguments1)+offset)
+    y1 = x1 * a1 + b1
 
     a2, b2 = linreg(arguments2, values2)
     x2 = np.linspace(min(arguments2)-offset, max(arguments2)+offset)
     y2 = x2 * a2 + b2
 
-    fig2, ax2 = plt.subplots()
-    ax2.plot(x, y, "-b")
-    ax2.plot(x2, y2, "-r")
-    ax2.errorbar(arguments1, values1, xerr=uI1, yerr=uT1, fmt=",b", label="brak polaryzacji", capsize=2)
-    ax2.errorbar(arguments2, values2, xerr=uI2, yerr=uT2, fmt=",r", label="polaryzacja", capsize=2)
-    plt.legend(loc="upper left")
 
+
+    fig2, ax2 = plt.subplots()
+    ax2.plot(x1, y1, "-b")
+    ax2.plot(x2, y2, "-r")
+    ax2.errorbar(arguments1, values1, xerr=uI1, yerr=uT1, fmt=",b", label="odwrotna polaryzacja", capsize=2)
+    ax2.errorbar(arguments2, values2, xerr=uI2, yerr=uT2, fmt=",r", label="zwykła polaryzacja", capsize=2)
+    plt.legend(loc="upper left")
     plt.minorticks_on()
     plt.xlabel(r"I - natężenie prądu [A]")
     plt.ylabel(r"$\Delta$T - różnica temperatury [K]")
     plt.grid()
     plt.title("wykres regresji liniowej różnicy temperatury od natężenia prądu")
+    w = LatexParser('../')
+    print(w.gen_tex_boilerplate(arguments1, values1, '$I$', '$\Delta$T', uncertain=True))
+    print('\\newpage')
+    print(w.gen_tex_boilerplate(arguments2, values2, '$I$', '$\Delta$T', uncertain=True))
     plt.show()
 
-    print(a1, b1)
-    print(a2, b2)
-    a, b = linreg(arguments, values)
-    x = np.linspace(min(arguments)-offset, max(arguments)+offset)
-    y = x * a + b
-    print(a, b)
-"""
-    Pojedyńcza
-  offset = 1
+
 
     a, b = linreg(arguments, values)
     x = np.linspace(min(arguments)-offset, max(arguments)+offset)
     y = x * a + b
-
-    a2, b2 = linreg(arguments2, values2)
-    x2 = np.linspace(min(arguments2)-offset, max(arguments2)+offset)
-    y2 = x2 * a2 + b2
-
-    fig2, ax2 = plt.subplots()
-    ax2.plot(x, y, "-g")
-
-    ax2.errorbar(arguments1, values1, xerr=uI1, yerr=uT1, fmt=",b", label="brak polaryzacji", capsize=2)
-    ax2.errorbar(arguments2, values2, xerr=uI2, yerr=uT2, fmt=",r", label="polaryzacja", capsize=2)
+    fig3, ax3 = plt.subplots()
+    ax3.plot(x, y, "-m")
+    ax3.errorbar(arguments1, values1, xerr=uI1, yerr=uT1, fmt=",b", label="odwrotna polaryzacja", capsize=2)
+    ax3.errorbar(arguments2, values2, xerr=uI2, yerr=uT2, fmt=",r", label="zwykła polaryzacja", capsize=2)
     plt.legend(loc="upper left")
 
     plt.minorticks_on()
@@ -88,12 +79,22 @@ def main():
     plt.ylabel(r"$\Delta$T - różnica temperatury [K]")
     plt.grid()
     plt.title("wykres regresji liniowej różnicy temperatury od natężenia prądu")
-"""
 
+    fig3, ax3 = plt.subplots()
+    ax3.errorbar(arguments1, values1, xerr=uI1, yerr=uT1, fmt=",b", label="odwrotna polaryzacja", capsize=2)
+    ax3.errorbar(arguments2, values2, xerr=uI2, yerr=uT2, fmt=",r", label="zwykła polaryzacja", capsize=2)
+    plt.legend(loc="upper left")
 
+    plt.minorticks_on()
+    plt.xlabel(r"I - natężenie prądu [A]")
+    plt.ylabel(r"$\Delta$T - różnica temperatury [K]")
+    plt.grid()
+    plt.title("wykres zależności temperatury od natężenia prądu")
 
+    print(w.gen_tex_boilerplate(arguments, values, '$I$', '$\Delta$T', uncertain=True))
+    plt.show()
 
-
+    os.system("cls")
 
 
 if __name__ == "__main__":

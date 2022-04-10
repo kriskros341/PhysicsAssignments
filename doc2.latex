@@ -1,6 +1,6 @@
 \begin{center}
 $
-\\ \huge{N = 10} \\ ~ \\
+\\ \huge{N = \VAR{N}} \\ ~ \\
 \huge{S_{x} = \Sigma_{i=1}^{N} \VAR{signX}}_{i} = \VAR{SX} \\
 %- if extended
  ~ \\
